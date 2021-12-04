@@ -1,5 +1,5 @@
 # Imports
-from numpy import zeros, array
+from numpy import zeros, array, array_equal
 import random
 
 
@@ -144,13 +144,43 @@ def getWinningBoard(bingoboards, playednumbers, printout=False):
 
 winningBoard, lastNumber, markedNumbers = getWinningBoard(bingoBoards, bingoNumbers, printout=True)
 
-sumOfUnmarkeNumbers = 0
-for i in range(5):
-    for j in range(5):
-        if markedNumbers[i][j] ==0:
-            sumOfUnmarkeNumbers += winningBoard[i][j]
+def calculateScore(board, lastNumber, markedNumbers):
+    sumOfUnmarkeNumbers = 0
+    for i in range(5):
+        for j in range(5):
+            if markedNumbers[i][j] ==0:
+                sumOfUnmarkeNumbers += board[i][j]
 
-print("Sum of unmarked numbers of winning board is:")
-print(sumOfUnmarkeNumbers)
-print("The final score is the sum * the last number:")
-print (str(sumOfUnmarkeNumbers) + " * " + str(lastNumber) + " = " + str(sumOfUnmarkeNumbers*lastNumber))
+    print("Sum of unmarked numbers of winning board is:")
+    print(sumOfUnmarkeNumbers)
+    print("The final score is the sum * the last number:")
+    print (str(sumOfUnmarkeNumbers) + " * " + str(lastNumber) + " = " + str(sumOfUnmarkeNumbers*lastNumber))
+
+calculateScore(winningBoard, lastNumber, markedNumbers)
+
+######### Task 2 ################
+
+def getLastWinningBoard(bingoboards, playednumbers, printout=False):
+    wonBoards = []
+    for i in range(len(playednumbers)):
+        currNumbers = playednumbers[0:i]
+        for board in bingoboards:
+            if checkIfBoardHasWon(board, currNumbers):
+                isAdded = False
+                for j in range(len(wonBoards)):
+                    if array_equal(board, wonBoards[j]):
+                        isAdded = True
+                if not isAdded:
+                    wonBoards.append(board)
+        if len(wonBoards) == 100:
+            if printout:
+                checkIfBoardHasWon(wonBoards[-1], currNumbers, printout=True)
+                print("This is where the numbers are hit:")
+                getPlayedMatrixOfBoard(wonBoards[-1], currNumbers, printout=True)
+            return wonBoards[-1], currNumbers[-1], getPlayedMatrixOfBoard(wonBoards[-1], currNumbers)
+    return 0
+        
+
+lastWinningBoard, lastNumber, markedNumbers = getLastWinningBoard(bingoBoards, bingoNumbers, True)
+
+calculateScore(lastWinningBoard, lastNumber, markedNumbers)
