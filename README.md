@@ -1,5 +1,5 @@
 ## aoc2021
-#Solutions for Advent of Code 2021
+# Solutions for Advent of Code 2021
 
 Advent of Code is a Christmas calender where you get two code puzzles every day which you can solve.
 Some solutions for them can be found here.
